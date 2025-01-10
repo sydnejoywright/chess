@@ -79,14 +79,36 @@ public class ChessPiece {
 
     public ChessMove getBishopPositions(ChessBoard board, ChessPosition myPosition) {
         Collection<ChessMove> validMoves=new ArrayList<>();
+        int row = myPosition.getRow();
+        int col = myPosition.getColumn();
+
         //check upper right
             //check bounds
+                while(row < 8 && col < 8){
+                    row += 1;
+                    col += 1;
+                    //increment one up and to the right and check if there is already a piece there
+                    ChessPiece piece = board[row][col];
+                    if(piece.getPieceType() != none){
+                        //if there is a piece we need to check whether it is the same team or not.
+                        if(){}
+                    }
+                    else(){
+                        validMoves.add({row, col});
+                        //continue the while loop until we find another piece or hit a boundary
+                        continue;
+                    }
+                }
+
+
+
                 add 1 to column and 1 to row
                 check if those coordinates are in bounds,
-                if so continue
-                check if there is a piece at the target position
-                if it is same team, do not add that space as valid
-                if it is other team, add the space as valid
+                check if those coordinates are empty
+                if both in bounds and empty add the coordinates to the valid moves
+                continue until not empty
+                check if it is same team, do not add that space as valid
+                if it is other team, add the space as valid and quit traveling in that direction.
 
 
 

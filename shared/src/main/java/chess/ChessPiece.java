@@ -65,7 +65,7 @@ public class ChessPiece {
     }
 
 
-    public Boolean progressBishop(ChessBoard board, ChessPosition newPosition, ChessPosition myPosition, Collection<ChessMove> validMoves) {
+    public Boolean progressBishopOrStop(ChessBoard board, ChessPosition newPosition, ChessPosition myPosition, Collection<ChessMove> validMoves) {
         ChessPiece piece = board.getPiece(newPosition);
         if(piece != null) {
             //if there is a piece we need to check whether it is the same team or not.
@@ -91,41 +91,50 @@ public class ChessPiece {
 
     //check upper right
         //check bounds
-            while(row < 7 && col < 7){
+            while(row < 8 && col < 8){
                 row ++;
                 col ++;
                 ChessPosition newPosition = new ChessPosition(row,col);
-                if(!progressBishop(board, newPosition, myPosition, validMoves)){
+                if(!progressBishopOrStop(board, newPosition, myPosition, validMoves)){
                     break;
                 }
             }
 
+        row = myPosition.getRow();
+        col = myPosition.getColumn();
+
         // check upper left
-            while(row < 7 && col > 1){
+            while(row < 8 && col > 1){
                 row ++;
                 col --;
                 ChessPosition newPosition = new ChessPosition(row,col);
-                if(!progressBishop(board, newPosition, myPosition, validMoves)){
+                if(!progressBishopOrStop(board, newPosition, myPosition, validMoves)){
                     break;
                 }
             }
 
+        row = myPosition.getRow();
+        col = myPosition.getColumn();
+
         //check lower right
-            while(row > 1 && col < 7){
+            while(row > 1 && col < 8){
                 row --;
                 col ++;
                 ChessPosition newPosition = new ChessPosition(row,col);
-                if(!progressBishop(board, newPosition, myPosition, validMoves)){
+                if(!progressBishopOrStop(board, newPosition, myPosition, validMoves)){
                     break;
                 }
             }
+
+        row = myPosition.getRow();
+        col = myPosition.getColumn();
 
         //check lower left
             while(row > 1 && col > 1){
                 row --;
                 col --;
                 ChessPosition newPosition = new ChessPosition(row,col);
-                if(!progressBishop(board, newPosition, myPosition, validMoves)){
+                if(!progressBishopOrStop(board, newPosition, myPosition, validMoves)){
                     break;
                 }
             }

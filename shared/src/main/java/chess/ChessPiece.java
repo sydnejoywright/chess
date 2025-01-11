@@ -58,26 +58,40 @@ public class ChessPiece {
         //Each piece type will call its own method with its own logic and return its respective valid moves.
         PieceType piece=getPieceType(board, myPosition);
         if (piece == PieceType.BISHOP) {
-            validMoves.add(getBishopPositions(board, myPosition));
+            validMoves.addAll(getBishopPositions(board, myPosition));
         }
         
         return validMoves;
     }
 
-    public Boolean checkIfInBounds(int row, int col){
-        if(row > 8){
-            return false;
-        }
-        else if(row < 1){
-            return false;
-        }
-        else if(col > 8){
-            return false;
-        }
-        else return col >= 1;
-    }
 
-    public ChessMove getBishopPositions(ChessBoard board, ChessPosition myPosition) {
+//    public void bishopsHelper(ChessBoard board, ChessPosition testPosition, ChessPosition currentRow, ChessPosition currentCol) {
+//        Collection<ChessMove> intValidMoves=new ArrayList<>();
+//        //these are the coordinates of the space that I want to test.
+//        int row = testPosition.getRow();
+//        int col = testPosition.getColumn();
+//
+//        ChessPiece current = board[currentRow][currentCol];
+//
+//        ChessPiece piece = board[row][col];
+//        if(piece.getPieceType() != null) {
+//            //if there is a piece we need to check whether it is the same team or not.
+//            if (piece.getTeamColor() != current.getTeamColor) {
+//                int
+//                intValidMoves.add({row, col});
+//            } else () {
+//                break;
+//            }
+//        }
+//        //if there is no piece already in that space we can go ahead and add it as a valid move
+//        else(){
+//            intValidMoves.add({row, col});
+//            //continue the while loop until we find another piece or hit a boundary
+//            continue;
+//        }
+//    }
+
+    public Collection<ChessMove> getBishopPositions(ChessBoard board, ChessPosition myPosition) {
         Collection<ChessMove> validMoves=new ArrayList<>();
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
@@ -85,43 +99,99 @@ public class ChessPiece {
         //check upper right
             //check bounds
                 while(row < 8 && col < 8){
-                    row += 1;
-                    col += 1;
+                    ChessPiece current = board.getPiece(myPosition);
+                    row ++;
+                    col ++;
                     //increment one up and to the right and check if there is already a piece there
-                    ChessPiece piece = board[row][col];
-                    if(piece.getPieceType() != none){
+                    ChessPosition newPosition = new ChessPosition(row,col);
+                    ChessPiece piece = board.getPiece(newPosition);
+                    if(piece.getPieceType(board, myPosition) != null) {
                         //if there is a piece we need to check whether it is the same team or not.
-                        if(){}
+                        if (piece.getTeamColor() != current.getTeamColor()) {
+                            ChessMove possibleMove = new ChessMove(myPosition, newPosition, PieceType.BISHOP);
+                            validMoves.add(possibleMove);
+                        }
+                      break;
                     }
-                    else(){
-                        validMoves.add({row, col});
+                    //if there is no piece already in that space we can go ahead and add it as a valid move
+                    else {
+                        ChessMove possibleMove = new ChessMove(myPosition, newPosition, PieceType.BISHOP);
+                        validMoves.add(possibleMove);
                         //continue the while loop until we find another piece or hit a boundary
-                        continue;
                     }
                 }
 
+        // check upper left
+            while(row < 8 && col > 1){
+                ChessPiece current = board.getPiece(myPosition);
+                row ++;
+                col --;
 
-
-                add 1 to column and 1 to row
-                check if those coordinates are in bounds,
-                check if those coordinates are empty
-                if both in bounds and empty add the coordinates to the valid moves
-                continue until not empty
-                check if it is same team, do not add that space as valid
-                if it is other team, add the space as valid and quit traveling in that direction.
-
-
-
-            if (checkIfInBounds(myPosition.getRow(), myPosition.getColumn())){
-
+                ChessPosition newPosition = new ChessPosition(row,col);
+                ChessPiece piece = board.getPiece(newPosition);
+                if(piece.getPieceType(board, myPosition) != null) {
+                    //if there is a piece we need to check whether it is the same team or not.
+                    if (piece.getTeamColor() != current.getTeamColor()) {
+                        ChessMove possibleMove = new ChessMove(myPosition, newPosition, PieceType.BISHOP);
+                        validMoves.add(possibleMove);
+                    }
+                    break;
+                }
+                //if there is no piece already in that space we can go ahead and add it as a valid move
+                else {
+                    ChessMove possibleMove = new ChessMove(myPosition, newPosition, PieceType.BISHOP);
+                    validMoves.add(possibleMove);
+                    //continue the while loop until we find another piece or hit a boundary
+                }
             }
 
 
-
-
-        //check upper left
         //check lower right
+            while(row > 1 && col < 8){
+                ChessPiece current = board.getPiece(myPosition);
+                row --;
+                col ++;
+                ChessPosition newPosition = new ChessPosition(row,col);
+                ChessPiece piece = board.getPiece(newPosition);
+                if(piece.getPieceType(board, myPosition) != null) {
+                    //if there is a piece we need to check whether it is the same team or not.
+                    if (piece.getTeamColor() != current.getTeamColor()) {
+                        ChessMove possibleMove = new ChessMove(myPosition, newPosition, PieceType.BISHOP);
+                        validMoves.add(possibleMove);
+                    }
+                    break;
+                }
+                //if there is no piece already in that space we can go ahead and add it as a valid move
+                else {
+                    ChessMove possibleMove = new ChessMove(myPosition, newPosition, PieceType.BISHOP);
+                    validMoves.add(possibleMove);
+                    //continue the while loop until we find another piece or hit a boundary
+                }
+            }
+
         //check lower left
+            while(row > 1 && col > 1){
+                ChessPiece current = board.getPiece(myPosition);
+                row --;
+                col --;
+
+                ChessPosition newPosition = new ChessPosition(row,col);
+                ChessPiece piece = board.getPiece(newPosition);
+                if(piece.getPieceType(board, myPosition) != null) {
+                    //if there is a piece we need to check whether it is the same team or not.
+                    if (piece.getTeamColor() != current.getTeamColor()) {
+                        ChessMove possibleMove = new ChessMove(myPosition, newPosition, PieceType.BISHOP);
+                        validMoves.add(possibleMove);
+                    }
+                    break;
+                }
+                //if there is no piece already in that space we can go ahead and add it as a valid move
+                else {
+                    ChessMove possibleMove = new ChessMove(myPosition, newPosition, PieceType.BISHOP);
+                    validMoves.add(possibleMove);
+                    //continue the while loop until we find another piece or hit a boundary
+                }
+            }
         
         return validMoves;
     }

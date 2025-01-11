@@ -65,31 +65,24 @@ public class ChessPiece {
     }
 
 
-//    public void bishopsHelper(ChessBoard board, ChessPosition testPosition, ChessPosition currentRow, ChessPosition currentCol) {
-//        Collection<ChessMove> intValidMoves=new ArrayList<>();
-//        //these are the coordinates of the space that I want to test.
-//        int row = testPosition.getRow();
-//        int col = testPosition.getColumn();
-//
-//        ChessPiece current = board[currentRow][currentCol];
-//
-//        ChessPiece piece = board[row][col];
-//        if(piece.getPieceType() != null) {
-//            //if there is a piece we need to check whether it is the same team or not.
-//            if (piece.getTeamColor() != current.getTeamColor) {
-//                int
-//                intValidMoves.add({row, col});
-//            } else () {
-//                break;
-//            }
-//        }
-//        //if there is no piece already in that space we can go ahead and add it as a valid move
-//        else(){
-//            intValidMoves.add({row, col});
-//            //continue the while loop until we find another piece or hit a boundary
-//            continue;
-//        }
-//    }
+    public Boolean progressBishop(ChessBoard board, ChessPosition newPosition, ChessPosition myPosition, Collection<ChessMove> validMoves) {
+        ChessPiece piece = board.getPiece(newPosition);
+        if(piece != null) {
+            //if there is a piece we need to check whether it is the same team or not.
+            if (piece.getTeamColor() != this.getTeamColor()) {
+                ChessMove possibleMove = new ChessMove(myPosition, newPosition, null);
+                validMoves.add(possibleMove);
+            }
+            return false;
+        }
+        //if there is no piece already in that space we can go ahead and add it as a valid move
+        else {
+            ChessMove possibleMove = new ChessMove(myPosition, newPosition, null);
+            validMoves.add(possibleMove);
+            return true;
+            //continue the while loop until we find another piece or hit a boundary
+        }
+    }
 
     public Collection<ChessMove> getBishopPositions(ChessBoard board, ChessPosition myPosition) {
         Collection<ChessMove> validMoves=new ArrayList<>();
@@ -98,98 +91,42 @@ public class ChessPiece {
 
     //check upper right
         //check bounds
-            while(row < 8 && col < 8){
-                ChessPiece current = board.getPiece(myPosition);
+            while(row < 7 && col < 7){
                 row ++;
                 col ++;
-                //increment one up and to the right and check if there is already a piece there
                 ChessPosition newPosition = new ChessPosition(row,col);
-                ChessPiece piece = board.getPiece(newPosition);
-                if(piece != null) {
-                    //if there is a piece we need to check whether it is the same team or not.
-                    if (piece.getTeamColor() != current.getTeamColor()) {
-                        ChessMove possibleMove = new ChessMove(myPosition, newPosition, null);
-                        validMoves.add(possibleMove);
-                    }
-                  break;
-                }
-                //if there is no piece already in that space we can go ahead and add it as a valid move
-                else {
-                    ChessMove possibleMove = new ChessMove(myPosition, newPosition, null);
-                    validMoves.add(possibleMove);
-                    //continue the while loop until we find another piece or hit a boundary
+                if(!progressBishop(board, newPosition, myPosition, validMoves)){
+                    break;
                 }
             }
 
         // check upper left
-            while(row < 8 && col > 1){
-                ChessPiece current = board.getPiece(myPosition);
+            while(row < 7 && col > 1){
                 row ++;
                 col --;
-
                 ChessPosition newPosition = new ChessPosition(row,col);
-                ChessPiece piece = board.getPiece(newPosition);
-                if(piece != null) {
-                    //if there is a piece we need to check whether it is the same team or not.
-                    if (piece.getTeamColor() != current.getTeamColor()) {
-                        ChessMove possibleMove = new ChessMove(myPosition, newPosition, PieceType.BISHOP);
-                        validMoves.add(possibleMove);
-                    }
+                if(!progressBishop(board, newPosition, myPosition, validMoves)){
                     break;
-                }
-                //if there is no piece already in that space we can go ahead and add it as a valid move
-                else {
-                    ChessMove possibleMove = new ChessMove(myPosition, newPosition, PieceType.BISHOP);
-                    validMoves.add(possibleMove);
-                    //continue the while loop until we find another piece or hit a boundary
                 }
             }
 
-
         //check lower right
-            while(row > 1 && col < 8){
-                ChessPiece current = board.getPiece(myPosition);
+            while(row > 1 && col < 7){
                 row --;
                 col ++;
                 ChessPosition newPosition = new ChessPosition(row,col);
-                ChessPiece piece = board.getPiece(newPosition);
-                if(piece != null) {
-                    //if there is a piece we need to check whether it is the same team or not.
-                    if (piece.getTeamColor() != current.getTeamColor()) {
-                        ChessMove possibleMove = new ChessMove(myPosition, newPosition, PieceType.BISHOP);
-                        validMoves.add(possibleMove);
-                    }
+                if(!progressBishop(board, newPosition, myPosition, validMoves)){
                     break;
-                }
-                //if there is no piece already in that space we can go ahead and add it as a valid move
-                else {
-                    ChessMove possibleMove = new ChessMove(myPosition, newPosition, PieceType.BISHOP);
-                    validMoves.add(possibleMove);
-                    //continue the while loop until we find another piece or hit a boundary
                 }
             }
 
         //check lower left
             while(row > 1 && col > 1){
-                ChessPiece current = board.getPiece(myPosition);
                 row --;
                 col --;
-
                 ChessPosition newPosition = new ChessPosition(row,col);
-                ChessPiece piece = board.getPiece(newPosition);
-                if(piece != null) {
-                    //if there is a piece we need to check whether it is the same team or not.
-                    if (piece.getTeamColor() != current.getTeamColor()) {
-                        ChessMove possibleMove = new ChessMove(myPosition, newPosition, PieceType.BISHOP);
-                        validMoves.add(possibleMove);
-                    }
+                if(!progressBishop(board, newPosition, myPosition, validMoves)){
                     break;
-                }
-                //if there is no piece already in that space we can go ahead and add it as a valid move
-                else {
-                    ChessMove possibleMove = new ChessMove(myPosition, newPosition, PieceType.BISHOP);
-                    validMoves.add(possibleMove);
-                    //continue the while loop until we find another piece or hit a boundary
                 }
             }
         

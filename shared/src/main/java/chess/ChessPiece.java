@@ -41,7 +41,7 @@ public class ChessPiece {
     /**
      * @return which type of chess piece this piece is
      */
-    public PieceType getPieceType(ChessBoard board, ChessPosition position) {
+    public PieceType getPieceType() {
         return type;
     }
 
@@ -56,7 +56,7 @@ public class ChessPiece {
         //The array of valid moves that will be returned
         Collection<ChessMove> validMoves=new ArrayList<>();
         //Each piece type will call its own method with its own logic and return its respective valid moves.
-        PieceType piece=getPieceType(board, myPosition);
+        PieceType piece = getPieceType();
         if (piece == PieceType.BISHOP) {
             validMoves.addAll(getBishopPositions(board, myPosition));
         }
@@ -96,30 +96,30 @@ public class ChessPiece {
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
 
-        //check upper right
-            //check bounds
-                while(row < 8 && col < 8){
-                    ChessPiece current = board.getPiece(myPosition);
-                    row ++;
-                    col ++;
-                    //increment one up and to the right and check if there is already a piece there
-                    ChessPosition newPosition = new ChessPosition(row,col);
-                    ChessPiece piece = board.getPiece(newPosition);
-                    if(piece.getPieceType(board, myPosition) != null) {
-                        //if there is a piece we need to check whether it is the same team or not.
-                        if (piece.getTeamColor() != current.getTeamColor()) {
-                            ChessMove possibleMove = new ChessMove(myPosition, newPosition, PieceType.BISHOP);
-                            validMoves.add(possibleMove);
-                        }
-                      break;
-                    }
-                    //if there is no piece already in that space we can go ahead and add it as a valid move
-                    else {
-                        ChessMove possibleMove = new ChessMove(myPosition, newPosition, PieceType.BISHOP);
+    //check upper right
+        //check bounds
+            while(row < 8 && col < 8){
+                ChessPiece current = board.getPiece(myPosition);
+                row ++;
+                col ++;
+                //increment one up and to the right and check if there is already a piece there
+                ChessPosition newPosition = new ChessPosition(row,col);
+                ChessPiece piece = board.getPiece(newPosition);
+                if(piece != null) {
+                    //if there is a piece we need to check whether it is the same team or not.
+                    if (piece.getTeamColor() != current.getTeamColor()) {
+                        ChessMove possibleMove = new ChessMove(myPosition, newPosition, null);
                         validMoves.add(possibleMove);
-                        //continue the while loop until we find another piece or hit a boundary
                     }
+                  break;
                 }
+                //if there is no piece already in that space we can go ahead and add it as a valid move
+                else {
+                    ChessMove possibleMove = new ChessMove(myPosition, newPosition, null);
+                    validMoves.add(possibleMove);
+                    //continue the while loop until we find another piece or hit a boundary
+                }
+            }
 
         // check upper left
             while(row < 8 && col > 1){
@@ -129,7 +129,7 @@ public class ChessPiece {
 
                 ChessPosition newPosition = new ChessPosition(row,col);
                 ChessPiece piece = board.getPiece(newPosition);
-                if(piece.getPieceType(board, myPosition) != null) {
+                if(piece != null) {
                     //if there is a piece we need to check whether it is the same team or not.
                     if (piece.getTeamColor() != current.getTeamColor()) {
                         ChessMove possibleMove = new ChessMove(myPosition, newPosition, PieceType.BISHOP);
@@ -153,7 +153,7 @@ public class ChessPiece {
                 col ++;
                 ChessPosition newPosition = new ChessPosition(row,col);
                 ChessPiece piece = board.getPiece(newPosition);
-                if(piece.getPieceType(board, myPosition) != null) {
+                if(piece != null) {
                     //if there is a piece we need to check whether it is the same team or not.
                     if (piece.getTeamColor() != current.getTeamColor()) {
                         ChessMove possibleMove = new ChessMove(myPosition, newPosition, PieceType.BISHOP);
@@ -177,7 +177,7 @@ public class ChessPiece {
 
                 ChessPosition newPosition = new ChessPosition(row,col);
                 ChessPiece piece = board.getPiece(newPosition);
-                if(piece.getPieceType(board, myPosition) != null) {
+                if(piece != null) {
                     //if there is a piece we need to check whether it is the same team or not.
                     if (piece.getTeamColor() != current.getTeamColor()) {
                         ChessMove possibleMove = new ChessMove(myPosition, newPosition, PieceType.BISHOP);

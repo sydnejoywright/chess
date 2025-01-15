@@ -79,7 +79,6 @@ public class ChessPiece {
         return validMoves;
     }
 
-
     public Boolean progressPieceOrStop(ChessBoard board, ChessPosition newPosition, ChessPosition myPosition, Collection<ChessMove> validMoves) {
         ChessPiece piece = board.getPiece(newPosition);
         if(piece != null) {
@@ -101,61 +100,190 @@ public class ChessPiece {
 
     public Collection<ChessMove> getPawnPositions(ChessBoard board, ChessPosition myPosition) {
         Collection<ChessMove> validMoves=new ArrayList<>();
-        int row=myPosition.getRow();
-        int col=myPosition.getColumn();
-        //choose white team to start with
-        if(getTeamColor() == ChessGame.TeamColor.WHITE) {
-            //check if it's the first move for that pawn
-            if(row == 2){
-                //check if it can move forward 1
-                row ++;
-                ChessPosition firstPosition = new ChessPosition(row, col);
-                ChessPiece piece = board.getPiece(firstPosition);
-                if(piece == null) {
-                    ChessMove firstMove = new ChessMove(myPosition, firstPosition, null);
-                    validMoves.add(firstMove);
-
-                    //check if it can move forward 2
-                    row ++;
-                    ChessPosition secondPosition = new ChessPosition(row, col);
-                    ChessPiece secondPiece = board.getPiece(secondPosition);
-                    if(secondPiece == null) {
-                        ChessMove secondMove=new ChessMove(myPosition, secondPosition, null);
-                        validMoves.add(secondMove);
-                    }
-                }
-                //reset
-                row =myPosition.getRow();
-
-                //check if it can capture diagonally right (still assuming first move)
-                row++;
-                col++;
-                //check bounds
-                if (col < 8) {
-                    //check if a piece is there
-                    //if so, is it my same team
-                    //if not i can capture that spot
-                }
-
-            //check if it can capture diagonally left
-            }
-
+        if (getTeamColor() == ChessGame.TeamColor.WHITE) {
+            Collection<ChessMove> whiteMoves = whitePawnMoves(board, myPosition, validMoves);
+            validMoves.addAll(whiteMoves);
         }
-
-
-
-
-        //if not first move
-        //check if it can move forward 1
-        //check if it reached a final edge
-        //check if it can capture right
-        //check if it reached a final edge
-        //check if it can capture left
-        //check if it reached a final edge
-
+        else {
+            Collection<ChessMove> blackMoves = blackPawnMoves(board, myPosition, validMoves);
+            validMoves.addAll(blackMoves);
+        }
 
         return validMoves;
     }
+
+    public Boolean tryPawnForwardOne(ChessBoard board, ChessPosition myPosition, int row, int col, PieceType promotionPiece, Collection<ChessMove> validMoves){
+        ChessPosition firstPosition = new ChessPosition(row, col);
+            ChessPiece piece = board.getPiece(firstPosition);
+            if (piece == null) {
+                ChessMove firstMove = new ChessMove(myPosition, firstPosition, promotionPiece);
+                validMoves.add(firstMove);
+                return true;
+            }
+        return false;
+    }
+
+    public void tryPawnAttackRight(ChessBoard board, ChessPosition myPosition, int row, int col, PieceType promotionPiece, Collection<ChessMove> validMoves){
+        //check if a piece is there
+        ChessPosition testPosition=new ChessPosition(row, col);
+        ChessPiece testPiece=board.getPiece(testPosition);
+        if (testPiece != null) {
+            //if so, is it my same team? if not i can capture that spot
+            if (testPiece.getTeamColor() != this.getTeamColor()) {
+                ChessMove captureRight=new ChessMove(myPosition, testPosition, promotionPiece);
+                validMoves.add(captureRight);
+            }
+        }
+    }
+    public void tryPawnAttackLeft(ChessBoard board, ChessPosition myPosition, int row, int col, PieceType promotionPiece, Collection<ChessMove> validMoves){
+        //check if a piece is there
+        ChessPosition testPosition=new ChessPosition(row, col);
+        ChessPiece testPiece=board.getPiece(testPosition);
+        if (testPiece != null) {
+            //if so, is it my same team? if not i can capture that spot
+            if (testPiece.getTeamColor() != this.getTeamColor()) {
+                ChessMove captureRight=new ChessMove(myPosition, testPosition, promotionPiece);
+                validMoves.add(captureRight);
+            }
+        }
+    }
+    public Collection<ChessMove> blackPawnMoves(ChessBoard board, ChessPosition myPosition, Collection<ChessMove> validMoves) {
+        int row=myPosition.getRow();
+        int col=myPosition.getColumn();
+        //check if it is the first move
+        if (row == 7) {
+            //check one space ahead
+            row --;
+            if(tryPawnForwardOne(board, myPosition, row, col, null, validMoves)){
+                //check two spaces ahead, only if one space ahead is valid;
+                row --;
+                tryPawnForwardOne(board, myPosition, row, col, null, validMoves);
+            };
+
+            //reset
+            row = myPosition.getRow();
+
+            //try attacking right
+            row --;
+            col --;
+            if(col >= 1){
+                tryPawnAttackRight(board, myPosition, row, col, null, validMoves);
+            }
+
+            //reset
+            row = myPosition.getRow();
+            col = myPosition.getColumn();
+
+            //try attacking left
+            row --;
+            col ++;
+            if(col <= 8){
+                tryPawnAttackLeft(board, myPosition, row, col, null, validMoves);
+            }
+        }
+
+        //reset
+        row = myPosition.getRow();
+        col =myPosition.getColumn();
+
+        //if not first move
+        //check if it can move forward 1
+        row--;
+        if(row == 1){
+            tryPawnForwardOne(board, myPosition, row, col, PieceType.QUEEN, validMoves);
+            col--;
+            if(col >= 1) {
+                tryPawnAttackRight(board, myPosition, row, col, PieceType.QUEEN, validMoves);
+            }
+            col+=2;
+            if(col <= 8) {
+                tryPawnAttackLeft(board, myPosition, row, col, PieceType.QUEEN, validMoves);
+            }
+        }
+        else{
+            tryPawnForwardOne(board, myPosition, row, col, null, validMoves);
+            col --;
+            if(col >= 1) {
+                tryPawnAttackRight(board, myPosition, row, col, null, validMoves);
+            }
+            col += 2;
+            if(col <= 8) {
+                tryPawnAttackLeft(board, myPosition, row, col, null, validMoves);
+            }
+        }
+        return validMoves;
+    }
+    public Collection<ChessMove> whitePawnMoves(ChessBoard board, ChessPosition myPosition, Collection<ChessMove> validMoves) {
+        int row=myPosition.getRow();
+        int col=myPosition.getColumn();
+        //check if it is the first move
+        if (row == 2) {
+            //check one space ahead
+            row ++;
+            if(tryPawnForwardOne(board, myPosition, row, col, null, validMoves)){
+                //check two spaces ahead, only if one space ahead is valid;
+                row ++;
+                tryPawnForwardOne(board, myPosition, row, col, null, validMoves);
+            };
+
+            //reset
+            row = myPosition.getRow();
+
+            //try attacking right
+            row ++;
+            col ++;
+            if(row <= 8 && col <= 8){
+                tryPawnAttackRight(board, myPosition, row, col, null, validMoves);
+            }
+
+            //reset
+            row = myPosition.getRow();
+            col = myPosition.getColumn();
+
+            //try attacking left
+            row ++;
+            col --;
+            if(row <= 8 && col >= 1){
+                tryPawnAttackLeft(board, myPosition, row, col, null, validMoves);
+            }
+        }
+
+        //reset
+        row = myPosition.getRow();
+        col =myPosition.getColumn();
+
+        //if not first move
+        //check if it can move forward 1
+        row++;
+
+        if(row == 8){
+            tryPawnForwardOne(board, myPosition, row, col, PieceType.QUEEN, validMoves);
+            col++;
+            if(col <= 8) {
+                tryPawnAttackRight(board, myPosition, row, col, PieceType.QUEEN, validMoves);
+            }
+            col-=2;
+            if(col >= 1) {
+                tryPawnAttackLeft(board, myPosition, row, col, PieceType.QUEEN, validMoves);
+            }
+        }
+        else{
+            tryPawnForwardOne(board, myPosition, row, col, null, validMoves);
+            col ++;
+            if(col <= 8) {
+                tryPawnAttackRight(board, myPosition, row, col, null, validMoves);
+            }
+            col -=2;
+            if(col >= 1) {
+                tryPawnAttackLeft(board, myPosition, row, col, null, validMoves);
+            }
+        }
+
+        return validMoves;
+    }
+
+
+
 
 
     public Collection<ChessMove> getKnightPositions(ChessBoard board, ChessPosition myPosition) {

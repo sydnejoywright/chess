@@ -2,6 +2,7 @@ package chess;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * Represents a single chess piece
@@ -17,6 +18,28 @@ public class ChessPiece {
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
         this.pieceColor = pieceColor;
         this.type = type;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessPiece that=(ChessPiece) o;
+        return pieceColor == that.pieceColor && type == that.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pieceColor, type);
+    }
+
+    @Override
+    public String toString() {
+        return "ChessPiece{" +
+                "pieceColor=" + pieceColor +
+                ", type=" + type +
+                "}\n";
+
     }
 
     /**
@@ -111,7 +134,6 @@ public class ChessPiece {
 
         return validMoves;
     }
-
     public Boolean tryPawnForwardOne(ChessBoard board, ChessPosition myPosition, int row, int col, PieceType promotionPiece, Collection<ChessMove> validMoves){
         ChessPosition firstPosition = new ChessPosition(row, col);
             ChessPiece piece = board.getPiece(firstPosition);
@@ -122,7 +144,6 @@ public class ChessPiece {
             }
         return false;
     }
-
     public void tryPawnAttackRight(ChessBoard board, ChessPosition myPosition, int row, int col, PieceType promotionPiece, Collection<ChessMove> validMoves){
         //check if a piece is there
         ChessPosition testPosition=new ChessPosition(row, col);
@@ -300,9 +321,6 @@ public class ChessPiece {
 
         return validMoves;
     }
-
-
-
 
 
     public Collection<ChessMove> getKnightPositions(ChessBoard board, ChessPosition myPosition) {

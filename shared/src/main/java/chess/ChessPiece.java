@@ -191,13 +191,23 @@ public class ChessPiece {
         row--;
         if(row == 1){
             tryPawnForwardOne(board, myPosition, row, col, PieceType.QUEEN, validMoves);
+            tryPawnForwardOne(board, myPosition, row, col, PieceType.BISHOP, validMoves);
+            tryPawnForwardOne(board, myPosition, row, col, PieceType.KNIGHT, validMoves);
+            tryPawnForwardOne(board, myPosition, row, col, PieceType.ROOK, validMoves);
+
             col--;
             if(col >= 1) {
                 tryPawnAttackRight(board, myPosition, row, col, PieceType.QUEEN, validMoves);
+                tryPawnAttackRight(board, myPosition, row, col, PieceType.BISHOP, validMoves);
+                tryPawnAttackRight(board, myPosition, row, col, PieceType.KNIGHT, validMoves);
+                tryPawnAttackRight(board, myPosition, row, col, PieceType.ROOK, validMoves);
             }
             col+=2;
             if(col <= 8) {
                 tryPawnAttackLeft(board, myPosition, row, col, PieceType.QUEEN, validMoves);
+                tryPawnAttackLeft(board, myPosition, row, col, PieceType.BISHOP, validMoves);
+                tryPawnAttackLeft(board, myPosition, row, col, PieceType.KNIGHT, validMoves);
+                tryPawnAttackLeft(board, myPosition, row, col, PieceType.ROOK, validMoves);
             }
         }
         else{
@@ -258,13 +268,22 @@ public class ChessPiece {
 
         if(row == 8){
             tryPawnForwardOne(board, myPosition, row, col, PieceType.QUEEN, validMoves);
+            tryPawnForwardOne(board, myPosition, row, col, PieceType.BISHOP, validMoves);
+            tryPawnForwardOne(board, myPosition, row, col, PieceType.KNIGHT, validMoves);
+            tryPawnForwardOne(board, myPosition, row, col, PieceType.ROOK, validMoves);
             col++;
             if(col <= 8) {
                 tryPawnAttackRight(board, myPosition, row, col, PieceType.QUEEN, validMoves);
+                tryPawnAttackRight(board, myPosition, row, col, PieceType.BISHOP, validMoves);
+                tryPawnAttackRight(board, myPosition, row, col, PieceType.KNIGHT, validMoves);
+                tryPawnAttackRight(board, myPosition, row, col, PieceType.ROOK, validMoves);
             }
             col-=2;
             if(col >= 1) {
                 tryPawnAttackLeft(board, myPosition, row, col, PieceType.QUEEN, validMoves);
+                tryPawnAttackLeft(board, myPosition, row, col, PieceType.BISHOP, validMoves);
+                tryPawnAttackLeft(board, myPosition, row, col, PieceType.KNIGHT, validMoves);
+                tryPawnAttackLeft(board, myPosition, row, col, PieceType.ROOK, validMoves);
             }
         }
         else{
